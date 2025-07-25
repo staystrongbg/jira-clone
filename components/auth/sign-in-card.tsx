@@ -6,6 +6,7 @@ export const SignInCard = () => {
       <CardHeader className="flex flex-col items-center justify-center p-7">
         <CardTitle className="text-2xl">Welcome back!</CardTitle>
       </CardHeader>
+      <div className="px-7 mb-2"></div>
     </Card>
   );
 };
