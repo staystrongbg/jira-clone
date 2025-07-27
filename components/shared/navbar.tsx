@@ -3,8 +3,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../ui/button';
+import { usePathname } from 'next/navigation';
 
 export const Navbar = () => {
+  const pathname = usePathname();
+  const isSignInPage = pathname === '/sign-in';
   return (
     <nav className="bg-gray-800">
       <div className="container mx-auto flex justify-between items-center p-4">
@@ -14,17 +17,13 @@ export const Navbar = () => {
           width={152}
           height={32}
           priority
-          className="cursor-pointer"
+          className="cursor-pointer h-auto"
         />
         <div>
-          <Link
-            href="/"
-            className="text-white px-4 py-2 hover:bg-gray-700 rounded"
-          >
-            Home
-          </Link>
-          <Button variant={'secondary'} className="ml-4">
-            Sign Up
+          <Button asChild variant={'secondary'} className="ml-4">
+            <Link href={isSignInPage ? 'sign-up' : 'sign-in'}>
+              {isSignInPage ? 'Sign Up ' : 'Sign In'}
+            </Link>
           </Button>
         </div>
       </div>
