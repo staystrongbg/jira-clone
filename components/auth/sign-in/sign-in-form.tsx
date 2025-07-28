@@ -8,14 +8,12 @@ import {
 import { Input } from '../../ui/input';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { json, z } from 'zod';
 import { Button } from '../../ui/button';
-import { loginSchema } from '@/schemas';
+import { loginSchema, TLoginForm } from '@/schemas';
 import { useLogin } from '../api/use-login';
 
-type TLoginForm = z.infer<typeof loginSchema>;
-
 export const SignInForm = () => {
+  const { mutate } = useLogin();
   const form = useForm<TLoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -23,8 +21,6 @@ export const SignInForm = () => {
       password: '',
     },
   });
-
-  const { mutate } = useLogin();
 
   const onSubmit: SubmitHandler<TLoginForm> = (data) => {
     try {

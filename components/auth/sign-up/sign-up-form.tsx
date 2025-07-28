@@ -8,14 +8,12 @@ import {
 import { Input } from '../../ui/input';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from '../../ui/button';
-import { signupSchema } from '@/schemas';
+import { signupSchema, TSignUpForm } from '@/schemas';
 import { useRegister } from '../api/use-register';
 
-type TSignUpForm = z.infer<typeof signupSchema>;
-
 export const SignUpForm = () => {
+  const { mutate } = useRegister();
   const form = useForm<TSignUpForm>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -25,7 +23,6 @@ export const SignUpForm = () => {
       confirmPassword: '',
     },
   });
-  const { mutate } = useRegister();
 
   const onSubmit: SubmitHandler<TSignUpForm> = (data) => {
     try {

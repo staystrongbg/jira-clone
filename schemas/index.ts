@@ -5,6 +5,8 @@ export const loginSchema = z.object({
   password: z.string().min(1, { message: 'Invalid password.' }),
 });
 
+export type TLoginForm = z.infer<typeof loginSchema>;
+
 export const signupSchema = z
   .object({
     email: z.email({ message: 'Invalid email address' }),
@@ -20,3 +22,5 @@ export const signupSchema = z
     message: 'Passwords do not match',
     path: ['confirmPassword'],
   });
+
+export type TSignUpForm = z.infer<typeof signupSchema>;
