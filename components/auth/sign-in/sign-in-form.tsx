@@ -3,40 +3,37 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '../../ui/form';
 import { Input } from '../../ui/input';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { json, z } from 'zod';
 import { Button } from '../../ui/button';
+import { loginSchema } from '@/schemas';
+import { useLogin } from '../api/use-login';
 
-const formSchema = z.object({
-  email: z.email({ message: 'Invalid email address' }),
-  password: z.string().min(1, { message: 'Invalid password.' }),
-});
-
-type TLoginForm = z.infer<typeof formSchema>;
+type TLoginForm = z.infer<typeof loginSchema>;
 
 export const SignInForm = () => {
   const form = useForm<TLoginForm>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
+  const { mutate } = useLogin();
+
   const onSubmit: SubmitHandler<TLoginForm> = (data) => {
     try {
-      console.log('Submitting form with data:', data);
+      mutate({ json: data });
       form.reset();
     } catch (error) {
       console.error('Error submitting form:', error);
       form.setError('root', {
-        type: 'manual',
-        message: 'An error occurred while submitting the form.',
+        message: error instanceof Error ? error.message : 'An error occurred',
       });
     }
   };
@@ -50,7 +47,6 @@ export const SignInForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter your email" {...field} />
                 </FormControl>
@@ -63,7 +59,6 @@ export const SignInForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
                 <FormControl>
                   <Input
                     type="password"

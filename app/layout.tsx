@@ -3,6 +3,7 @@ import './globals.css';
 import { Navbar } from '@/components/shared/navbar';
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import QueryProviders from '@/components/query-provider';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -19,8 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, 'antialiased min-h-screen')}>
-        <Navbar />
-        {children}
+        <QueryProviders>
+          <Navbar />
+          {children}
+        </QueryProviders>
       </body>
     </html>
   );

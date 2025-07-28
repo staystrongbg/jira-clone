@@ -3,7 +3,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '../../ui/form';
 import { Input } from '../../ui/input';
@@ -11,28 +10,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '../../ui/button';
+import { signupSchema } from '@/schemas';
+import { useRegister } from '../api/use-register';
 
-const formSchema = z
-  .object({
-    email: z.email({ message: 'Invalid email address' }),
-    username: z.string().trim().min(1, { message: 'Username is required' }),
-    password: z
-      .string()
-      .min(6, { message: 'Password must be at least 6 characters long' }),
-    confirmPassword: z
-      .string()
-      .min(6, { message: 'Password and Confirmed Password must match' }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword'],
-  });
-
-type TSignUpForm = z.infer<typeof formSchema>;
+type TSignUpForm = z.infer<typeof signupSchema>;
 
 export const SignUpForm = () => {
   const form = useForm<TSignUpForm>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       email: '',
       username: '',
@@ -40,16 +25,19 @@ export const SignUpForm = () => {
       confirmPassword: '',
     },
   });
+  const { mutate } = useRegister();
 
   const onSubmit: SubmitHandler<TSignUpForm> = (data) => {
     try {
-      console.log('Submitting form with data:', data);
+      mutate({ json: data });
       form.reset();
     } catch (error) {
       console.error('Error submitting form:', error);
       form.setError('root', {
-        type: 'manual',
-        message: 'An error occurred while submitting the form.',
+        message:
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred',
       });
     }
   };
@@ -96,7 +84,11 @@ export const SignUpForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Enter your password" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -17,7 +17,7 @@ export const Navbar = () => {
           width={152}
           height={32}
           priority
-          className="cursor-pointer h-auto"
+          className="cursor-pointer h-auto w-auto"
         />
         <div>
           <Button asChild variant={'secondary'} className="ml-4">
