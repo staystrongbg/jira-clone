@@ -11,9 +11,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../../ui/button';
 import { signupSchema, TSignUpForm } from '@/schemas';
 import { useRegister } from '../api/use-register';
+import { useEffect } from 'react';
 
 export const SignUpForm = () => {
-  const { mutate } = useRegister();
+  const { mutate, error, isSuccess } = useRegister();
+
   const form = useForm<TSignUpForm>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -25,24 +27,27 @@ export const SignUpForm = () => {
   });
 
   const onSubmit: SubmitHandler<TSignUpForm> = (data) => {
-    try {
-      mutate({ json: data });
-      form.reset();
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      form.setError('root', {
-        message:
-          error instanceof Error
-            ? error.message
-            : 'An unexpected error occurred',
-      });
-    }
+    mutate({ json: data });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      form.reset();
+    }
+  }, [isSuccess, form]);
 
   return (
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {error && (
+            <div className="text-red-500 text-sm mb-2">
+              {error instanceof Error
+                ? error.message
+                : 'An unexpected error occurred'}
+            </div>
+          )}
+
           <FormField
             control={form.control}
             name="username"

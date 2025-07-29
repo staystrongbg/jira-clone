@@ -11,9 +11,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../../ui/button';
 import { loginSchema, TLoginForm } from '@/schemas';
 import { useLogin } from '../api/use-login';
+import { useEffect } from 'react';
 
 export const SignInForm = () => {
-  const { mutate } = useLogin();
+  const { mutate, isSuccess, error } = useLogin();
+
   const form = useForm<TLoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -25,7 +27,6 @@ export const SignInForm = () => {
   const onSubmit: SubmitHandler<TLoginForm> = (data) => {
     try {
       mutate({ json: data });
-      form.reset();
     } catch (error) {
       console.error('Error submitting form:', error);
       form.setError('root', {
@@ -33,6 +34,12 @@ export const SignInForm = () => {
       });
     }
   };
+  // Reset form on successful submission
+  useEffect(() => {
+    if (isSuccess) {
+      form.reset();
+    }
+  }, [isSuccess, form]);
 
   return (
     <>
@@ -44,7 +51,11 @@ export const SignInForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Enter your email" {...field} />
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

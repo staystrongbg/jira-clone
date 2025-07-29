@@ -20,7 +20,7 @@ export const Navbar = () => {
           className="cursor-pointer h-auto w-auto"
         />
         <div>
-          <Button asChild variant={'secondary'} className="ml-4">
+          <Button asChild variant={'complementary'} className="ml-4">
             <Link href={isSignInPage ? 'sign-up' : 'sign-in'}>
               {isSignInPage ? 'Sign Up ' : 'Sign In'}
             </Link>

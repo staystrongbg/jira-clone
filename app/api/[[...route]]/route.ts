@@ -9,7 +9,10 @@ const app = new Hono().basePath('/api');
 //potrebna nam je jedna const
 
 // all routes will be impported here
+
 const routes = app.route('/auth', auth);
+
+export type AppType = typeof routes;
 
 export const GET = handle(app);
 export const POST = handle(app);
@@ -17,7 +20,6 @@ export const POST = handle(app);
 //export type for future use
 //export from here because this is the main entry point for the API
 //this provides end-to-end type safety
-export type AppType = typeof routes;
 
 // Example of adding more routes
 app
