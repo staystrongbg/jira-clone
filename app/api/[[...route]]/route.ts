@@ -22,11 +22,11 @@ export const POST = handle(app);
 //this provides end-to-end type safety
 
 // Example of adding more routes
-app
-  .get('/hello', (c) => {
-    return c.json({ message: 'Hello, Hono!' });
-  })
-  .get('/projects/:projectId', (c) => {
-    const { projectId } = c.req.param();
-    return c.json({ projectId });
-  });
+// app
+//   .get('/hello', (c) => {
+//     return c.json({ message: 'Hello, Hono!' });
+//   })
+//   .get('/projects/:projectId', (c) => {
+//     const { projectId } = c.req.param();
+//     return c.json({ projectId });
+//   });

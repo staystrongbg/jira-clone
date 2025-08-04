@@ -14,7 +14,7 @@ import { useLogin } from '../api/use-login';
 import { useEffect } from 'react';
 
 export const SignInForm = () => {
-  const { mutate, isSuccess, error } = useLogin();
+  const { mutate, error, isSuccess, isError } = useLogin();
 
   const form = useForm<TLoginForm>({
     resolver: zodResolver(loginSchema),
@@ -25,15 +25,9 @@ export const SignInForm = () => {
   });
 
   const onSubmit: SubmitHandler<TLoginForm> = (data) => {
-    try {
-      mutate({ json: data });
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      form.setError('root', {
-        message: error instanceof Error ? error.message : 'An error occurred',
-      });
-    }
+    mutate({ json: data });
   };
+
   // Reset form on successful submission
   useEffect(() => {
     if (isSuccess) {
@@ -44,6 +38,14 @@ export const SignInForm = () => {
   return (
     <>
       <Form {...form}>
+        {error && (
+          <div className="text-red-500 text-sm mb-2">
+            {error instanceof Error
+              ? error.message
+              : 'An unexpected error occurred'}
+          </div>
+        )}
+
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
