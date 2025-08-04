@@ -15,6 +15,7 @@ import { sessionMiddleware } from '@/lib/session-middleware';
 const app = new Hono()
   .get('/current', sessionMiddleware, async (c) => {
     const user = c.get('user');
+
     if (!user) {
       return c.json({ error: 'Unauthorized' }, 401);
     }
@@ -39,7 +40,7 @@ const app = new Hono()
       maxAge: 60 * 60 * 24 * 30, // 30
     });
 
-    return c.json({ success: true }, 200);
+    return c.json({ data: session, success: true }, 200);
   })
   .post('/signup', zValidator('json', signupSchema), async (c) => {
     const { email, password, username } = c.req.valid('json');
