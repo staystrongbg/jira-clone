@@ -13,6 +13,9 @@ import { sessionMiddleware } from '@/lib/session-middleware';
 //using middleware zValidator for validation
 
 const app = new Hono()
+  .get('/health', (c) => {
+    return c.json({ status: 'ok' });
+  })
   .get('/current', sessionMiddleware, async (c) => {
     const user = c.get('user');
 

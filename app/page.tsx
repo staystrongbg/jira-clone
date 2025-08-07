@@ -1,11 +1,9 @@
-import { Button } from '@/components/ui/button';
 import React from 'react';
 
 export default function Home() {
   return (
-    <>
-      <h1 className="">Jira Clone</h1>
-      <Button variant={'outline'}>primary</Button>
-    </>
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-5xl">Welcome to Jira Clone</h1>
+    </div>
   );
 }
