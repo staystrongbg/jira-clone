@@ -5,16 +5,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
-import { Input } from "../../ui/input";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../../ui/button";
-import { loginSchema, TLoginForm } from "@/schemas";
-import { useLogin } from "../api/use-login";
-import { useCallback, useEffect } from "react";
-import { AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
-import { useState } from "react";
+} from '../../ui/form';
+import { Input } from '../../ui/input';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '../../ui/button';
+import { loginSchema, TLoginForm } from '@/schemas';
+import { useLogin } from '../api/use-login';
+import { useCallback, useEffect } from 'react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { IsError } from '@/components/shared/isError';
 
 export const SignInForm = () => {
   const { mutate, error, isSuccess, isPending } = useLogin();
@@ -23,10 +24,10 @@ export const SignInForm = () => {
   const form = useForm<TLoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
-    mode: "onBlur", // Validate on blur for better UX
+    mode: 'onBlur', // Validate on blur for better UX
   });
 
   const onSubmit: SubmitHandler<TLoginForm> = useCallback(
@@ -53,20 +54,7 @@ export const SignInForm = () => {
 
   return (
     <Form {...form}>
-      {error && (
-        <div
-          className="flex items-center gap-2 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md mb-4"
-          role="alert"
-          aria-live="polite"
-        >
-          <AlertCircle className="h-4 w-4 flex-shrink-0" />
-          <span>
-            {error instanceof Error
-              ? error.message
-              : "An unexpected error occurred. Please try again."}
-          </span>
-        </div>
-      )}
+      <IsError error={error} />
 
       <form
         onSubmit={form.handleSubmit(onSubmit)}
@@ -87,7 +75,7 @@ export const SignInForm = () => {
                   autoComplete="email"
                   disabled={isPending}
                   className={
-                    errors.email ? "border-red-500 focus:border-red-500" : ""
+                    errors.email ? 'border-red-500 focus:border-red-500' : ''
                   }
                   {...field}
                 />
@@ -107,14 +95,14 @@ export const SignInForm = () => {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Enter your password"
                     autoComplete="current-password"
                     disabled={isPending}
                     className={`pr-10 ${
                       errors.password
-                        ? "border-red-500 focus:border-red-500"
-                        : ""
+                        ? 'border-red-500 focus:border-red-500'
+                        : ''
                     }`}
                     {...field}
                   />
@@ -124,7 +112,7 @@ export const SignInForm = () => {
                     disabled={isPending}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 disabled:opacity-50"
                     aria-label={
-                      showPassword ? "Hide password" : "Show password"
+                      showPassword ? 'Hide password' : 'Show password'
                     }
                   >
                     {showPassword ? (
@@ -144,7 +132,7 @@ export const SignInForm = () => {
           type="submit"
           className="w-full"
           disabled={isPending || hasErrors}
-          aria-describedby={error ? "error-message" : undefined}
+          aria-describedby={error ? 'error-message' : undefined}
         >
           {isPending ? (
             <>
@@ -152,7 +140,7 @@ export const SignInForm = () => {
               Signing in...
             </>
           ) : (
-            "Sign In"
+            'Sign In'
           )}
         </Button>
       </form>

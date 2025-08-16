@@ -10,6 +10,7 @@ type ResponseType = InferResponseType<(typeof client.api.auth.logout)['$post']>;
 
 export const useLogout = () => {
   const queryClient = useQueryClient();
+
   const router = useRouter();
   const mutation = useMutation<ResponseType, Error>({
     mutationFn: async () => {
