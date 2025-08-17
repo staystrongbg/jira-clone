@@ -4,6 +4,7 @@ import { routes } from "@/app/(dashboard)/constants";
 import { MobileSidebar } from "../mobile-sidebar";
 import { UserButton } from "./user-button";
 import { usePathname } from "next/navigation";
+
 type PageTitleAndDescriptionProps = {
   title: string;
   description: string;
@@ -22,15 +23,14 @@ const PageTitleAndDescription = ({
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const pageDesc = routes.find((route) => route.href === pathname);
+  const page = routes.find((route) => route.href === pathname);
+  const title = page?.label || "";
+  const description = page?.description || "";
 
   return (
     <nav className="flex items-center justify-between lg:p-6 p-4 w-full">
       <MobileSidebar />
-      <PageTitleAndDescription
-        title={pageDesc?.label || ""}
-        description={pageDesc?.description || ""}
-      />
+      <PageTitleAndDescription title={title} description={description} />
       <UserButton />
     </nav>
   );

@@ -80,10 +80,22 @@ const app = new Hono()
   })
   .post("/logout", sessionMiddleware, async (c) => {
     //if unauthenticcated user tries to logout he will be introduced to 401 Unauthorized  otherwise information about session will be sent
-    const account = c.get("account");
-
-    deleteCookie(c, AUTH_COOKIE);
-    await account.deleteSession("current");
+    try {
+      const account = c.get("account");
+      await account.deleteSession("current");
+    } catch (error) {
+      // Log the error but don't block the logout process.
+      // The session might already be invalid, which is fine.
+      console.error("Failed to delete Appwrite session:", error);
+    } finally {
+      // Always delete the cookie to ensure the user is logged out on the client side
+      deleteCookie(c, AUTH_COOKIE, {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
+    }
 
     return c.json({ success: true }, 200);
   });

@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -12,6 +13,7 @@ import {
 import { Sidebar } from "./sidebar";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+
 export const MobileSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -23,13 +25,14 @@ export const MobileSidebar = () => {
   return (
     <Sheet modal={false} open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild className="lg:hidden">
-        <Button variant={"outline"} className="lg:hidden">
+        <Button variant={"outline"}>
           <MenuIcon />
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="bg-neutral-100">
         <SheetHeader>
-          <SheetTitle></SheetTitle>
+          <SheetTitle>Menu</SheetTitle>
+          <SheetDescription>Select a page</SheetDescription>
         </SheetHeader>
         <Sidebar />
       </SheetContent>
