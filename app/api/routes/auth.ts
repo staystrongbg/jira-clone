@@ -4,7 +4,7 @@ import { loginSchema, signupSchema } from "@/schemas";
 import { createAdminClient } from "@/lib/appwrite";
 import { deleteCookie, setCookie } from "hono/cookie";
 import { ID } from "node-appwrite";
-import { AUTH_COOKIE } from "../constants";
+import { AUTH_COOKIE } from "@/app/(auth)/constants";
 import { sessionMiddleware } from "@/lib/session-middleware";
 
 //same chaining here for type safety
@@ -40,9 +40,14 @@ const app = new Hono()
       });
 
       return c.json({ data: session, success: true }, 200);
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Appwrite specific error for invalid credentials
-      if (error.code === 401) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        error.code === 401
+      ) {
         return c.json({ error: "Invalid email or password." }, 401);
       }
       // Generic error for other cases
@@ -69,9 +74,14 @@ const app = new Hono()
       });
 
       return c.json({ success: true }, 201);
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Appwrite specific error for existing user
-      if (error.code === 409) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        error.code === 409
+      ) {
         return c.json({ error: "A user with this email already exists." }, 409);
       }
       // Generic error for other cases

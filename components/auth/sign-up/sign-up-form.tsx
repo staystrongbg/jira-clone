@@ -5,16 +5,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../ui/form';
-import { Input } from '../../ui/input';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '../../ui/button';
-import { signupSchema, TSignUpForm } from '@/schemas';
-import { useRegister } from '../api/use-register';
-import { useCallback, useEffect, useState } from 'react';
-import { Eye, EyeOff, Loader2, User } from 'lucide-react';
-import { IsError } from '@/components/shared/isError';
+} from "../../ui/form";
+import { Input } from "../../ui/input";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "../../ui/button";
+import { signupSchema, TSignUpForm } from "@/schemas";
+import { useRegister } from "../../../hooks/auth/use-register";
+import { useCallback, useEffect, useState } from "react";
+import { Eye, EyeOff, Loader2, User } from "lucide-react";
+import { IsError } from "@/components/shared/isError";
 
 export const SignUpForm = () => {
   const { mutate, error, isSuccess, isPending } = useRegister();
@@ -24,12 +24,12 @@ export const SignUpForm = () => {
   const form = useForm<TSignUpForm>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      email: '',
-      username: '',
-      password: '',
-      confirmPassword: '',
+      email: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
     },
-    mode: 'onBlur', // Validate on blur for better UX
+    mode: "onBlur", // Validate on blur for better UX
   });
 
   const onSubmit: SubmitHandler<TSignUpForm> = useCallback(
@@ -83,8 +83,8 @@ export const SignUpForm = () => {
                     disabled={isPending}
                     className={`pl-10 ${
                       errors.username
-                        ? 'border-red-500 focus:border-red-500'
-                        : ''
+                        ? "border-red-500 focus:border-red-500"
+                        : ""
                     }`}
                     {...field}
                   />
@@ -110,7 +110,7 @@ export const SignUpForm = () => {
                   autoComplete="email"
                   disabled={isPending}
                   className={
-                    errors.email ? 'border-red-500 focus:border-red-500' : ''
+                    errors.email ? "border-red-500 focus:border-red-500" : ""
                   }
                   {...field}
                 />
@@ -130,14 +130,14 @@ export const SignUpForm = () => {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     autoComplete="new-password"
                     disabled={isPending}
                     className={`pr-10 ${
                       errors.password
-                        ? 'border-red-500 focus:border-red-500'
-                        : ''
+                        ? "border-red-500 focus:border-red-500"
+                        : ""
                     }`}
                     {...field}
                   />
@@ -147,7 +147,7 @@ export const SignUpForm = () => {
                     disabled={isPending}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 disabled:opacity-50"
                     aria-label={
-                      showPassword ? 'Hide password' : 'Show password'
+                      showPassword ? "Hide password" : "Show password"
                     }
                   >
                     {showPassword ? (
@@ -173,14 +173,14 @@ export const SignUpForm = () => {
                 <div className="relative">
                   <Input
                     id="confirmPassword"
-                    type={showConfirmPassword ? 'text' : 'password'}
+                    type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm your password"
                     autoComplete="new-password"
                     disabled={isPending}
                     className={`pr-10 ${
                       errors.confirmPassword
-                        ? 'border-red-500 focus:border-red-500'
-                        : ''
+                        ? "border-red-500 focus:border-red-500"
+                        : ""
                     }`}
                     {...field}
                   />
@@ -191,8 +191,8 @@ export const SignUpForm = () => {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 disabled:opacity-50"
                     aria-label={
                       showConfirmPassword
-                        ? 'Hide confirm password'
-                        : 'Show confirm password'
+                        ? "Hide confirm password"
+                        : "Show confirm password"
                     }
                   >
                     {showConfirmPassword ? (
@@ -212,7 +212,7 @@ export const SignUpForm = () => {
           type="submit"
           className="w-full"
           disabled={isPending || hasErrors}
-          aria-describedby={error ? 'error-message' : undefined}
+          aria-describedby={error ? "error-message" : undefined}
         >
           {isPending ? (
             <>
@@ -220,7 +220,7 @@ export const SignUpForm = () => {
               Creating account...
             </>
           ) : (
-            'Create Account'
+            "Create Account"
           )}
         </Button>
       </form>

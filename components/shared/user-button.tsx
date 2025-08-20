@@ -5,20 +5,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  //   DropdownMenuLabel,
-  //   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { AvatarFallback } from "../ui/avatar";
 import { LogOut } from "lucide-react";
-import { useCurrentUser } from "../auth/api/use-current";
-import { useLogout } from "../auth/api/use-logout";
+import { useCurrentUser } from "../../hooks/auth/use-current";
+import { useLogout } from "../../hooks/auth/use-logout";
 
 export const UserButton = () => {
-  const { data } = useCurrentUser();
+  const { data: user } = useCurrentUser();
   const { mutate: logOut } = useLogout();
 
-  const avatarFallback = data?.name.charAt(0) || data?.email.charAt(0) || "U";
+  const avatarFallback = user?.name.charAt(0) || user?.email.charAt(0) || "U";
 
   return (
     <DropdownMenu>
@@ -28,7 +26,6 @@ export const UserButton = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {/* <DropdownMenuSeparator /> */}
         <DropdownMenuItem onClick={() => logOut()} className="cursor-pointer">
           <LogOut className="size-4 mr-2 text-amber-600" />
           Log out

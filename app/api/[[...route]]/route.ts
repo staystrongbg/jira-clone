@@ -1,16 +1,17 @@
 //set up hono route
-import { Hono } from 'hono';
-import { handle } from 'hono/vercel';
-import auth from '@/app/(auth)/server/route';
+import { Hono } from "hono";
+import { handle } from "hono/vercel";
+import auth from "@/app/api/routes/auth";
+import workspaces from "@/app/api/routes/workspaces";
 
-const app = new Hono().basePath('/api');
+const app = new Hono().basePath("/api");
 //zbog typesafety-ja moramo ih chainovati
 //ne mozemo  odvojeno za svaki metod
 //potrebna nam je jedna const
 
 // all routes will be impported here
 
-const routes = app.route('/auth', auth);
+const routes = app.route("/auth", auth).route("/workspaces", workspaces);
 
 export type AppType = typeof routes;
 

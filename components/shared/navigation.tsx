@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { routes } from "../app/(dashboard)/constants";
+import { routes } from "../../app/(dashboard)/constants";
 import { usePathname } from "next/navigation";
 
 export const Navigation = () => {

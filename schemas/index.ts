@@ -1,5 +1,5 @@
 import z from "zod";
-
+//Auth Schemas
 export const loginSchema = z.object({
   email: z
     .string()
@@ -47,3 +47,10 @@ export const signupSchema = z
   });
 
 export type TSignUpForm = z.infer<typeof signupSchema>;
+
+//Workspace Schema
+export const workspaceSchema = z.object({
+  name: z.string().trim().min(1, "Required"),
+});
+
+export type TWorkspaceForm = z.infer<typeof workspaceSchema>;

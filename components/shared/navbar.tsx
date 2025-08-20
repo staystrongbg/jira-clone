@@ -1,7 +1,7 @@
 "use client";
 
 import { routes } from "@/app/(dashboard)/constants";
-import { MobileSidebar } from "../mobile-sidebar";
+import { MobileSidebar } from "./mobile-sidebar";
 import { UserButton } from "./user-button";
 import { usePathname } from "next/navigation";
 
