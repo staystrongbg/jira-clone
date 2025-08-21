@@ -16,6 +16,11 @@ export const useRegister = () => {
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ json }) => {
       const response = await client.api.auth.signup.$post({ json });
+
+      if (!response.ok) {
+        throw new Error("Invalid email or password");
+      }
+
       return await response.json();
     },
     onSuccess: () => {

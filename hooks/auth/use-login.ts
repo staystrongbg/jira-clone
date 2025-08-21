@@ -16,14 +16,19 @@ export const useLogin = () => {
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ json }) => {
       const response = await client.api.auth.login.$post({ json });
+
+      if (!response.ok) {
+        throw new Error("Invalid email or password");
+      }
+
       return await response.json();
     },
     //redirect to homeppage after successful login
     onSuccess: () => {
-      toast.success("Login successful");
       // Invalidate the current user query to ensure the user is logged in
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       router.push("/");
+      toast.success("Login successful");
     },
     onError: () => {
       toast.error("Failed to login");

@@ -51,6 +51,12 @@ export type TSignUpForm = z.infer<typeof signupSchema>;
 //Workspace Schema
 export const workspaceSchema = z.object({
   name: z.string().trim().min(1, "Required"),
+  image: z
+    .union([
+      z.instanceof(File),
+      z.string().transform((value) => (value === "" ? undefined : value)),
+    ])
+    .optional(),
 });
 
 export type TWorkspaceForm = z.infer<typeof workspaceSchema>;
