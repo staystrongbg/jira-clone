@@ -28,16 +28,20 @@ import { DottedSeparator } from "../shared/dotted-separator";
 import { useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { useRouter } from "next/navigation";
 
 interface CreateWorkspaceFormProps {
   onCancel?: () => void;
 }
 
 export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
+  const router = useRouter();
+
   const form = useForm<TWorkspaceForm>({
     resolver: zodResolver(workspaceSchema),
     defaultValues: {
       name: "",
+      image: undefined,
     },
     mode: "onBlur",
   });
@@ -146,13 +150,13 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
                       <div className="flex flex-col">
                         <p className="text-sm">Workspace Icon</p>
                         <p className="text-sm text-muted-foreground">
-                          JPG, PNG, SVG or JPEG, max 1mb
+                          JPG, PNG, SVG or JPEG, WEBP, max 1mb
                         </p>
                       </div>
                     </div>
                     <Input
                       type="file"
-                      accept="image/jpeg, image/png, image/svg+xml"
+                      accept="image/jpeg, image/png, image/svg+xml, image/webp"
                       ref={inputRef}
                       className="hidden"
                       disabled={isPending}
@@ -161,8 +165,8 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
                     <Button
                       type="button"
                       className="w-fit mt-2"
-                      size={"sm"}
-                      variant="outline"
+                      size={"xs"}
+                      variant="ghost"
                       onClick={() => inputRef.current?.click()}
                       disabled={isPending}
                     >
@@ -187,10 +191,14 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
                   variant={"default"}
                   disabled={isPending}
                 >
-                  {isPending
-                    ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> +
-                      "Creating..."
-                    : "Create Workspace"}
+                  {isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    "Create Workspace"
+                  )}
                 </Button>
               </div>
             </div>

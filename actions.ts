@@ -1,13 +1,20 @@
 import { AUTH_COOKIE } from '@/app/(auth)/constants';
 
 import { cookies } from 'next/headers';
-import { Account, Client } from 'node-appwrite';
+import { Account, Client, Models } from 'node-appwrite';
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<Models.User | null> => {
   try {
+    const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
+    const project = process.env.NEXT_PUBLIC_APPWRITE_PROJECT;
+
+    if (!endpoint || !project) {
+      throw new Error('Appwrite endpoint or project not configured');
+    }
+
     const client = new Client()
-      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+      .setEndpoint(endpoint)
+      .setProject(project);
 
     const cookieStore = cookies();
     const sessionCookie = cookieStore.get(AUTH_COOKIE);
@@ -23,7 +30,7 @@ export const getCurrentUser = async () => {
 
     return await account.get();
   } catch (error) {
-    console.error('Error fetching current user:', error);
+    console.error('Failed to fetch current user:', error instanceof Error ? error.message : error);
     return null;
   }
 };

@@ -12,12 +12,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../ui/button";
 import { signupSchema, TSignUpForm } from "@/schemas";
 import { useRegister } from "../../../hooks/auth/use-register";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Eye, EyeOff, Loader2, User } from "lucide-react";
 import { IsError } from "@/components/shared/isError";
 
 export const SignUpForm = () => {
-  const { mutate, error, isSuccess, isPending } = useRegister();
+  const { mutate, error, isPending } = useRegister();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -34,9 +34,16 @@ export const SignUpForm = () => {
 
   const onSubmit: SubmitHandler<TSignUpForm> = useCallback(
     (data: TSignUpForm) => {
-      mutate({ json: data });
+      mutate(
+        { json: data },
+        {
+          onSuccess: () => {
+            form.reset();
+          },
+        }
+      );
     },
-    [mutate]
+    [mutate, form]
   );
 
   const togglePasswordVisibility = useCallback(() => {
@@ -46,13 +53,6 @@ export const SignUpForm = () => {
   const toggleConfirmPasswordVisibility = useCallback(() => {
     setShowConfirmPassword((prev) => !prev);
   }, []);
-
-  // Reset form on successful submission
-  useEffect(() => {
-    if (isSuccess) {
-      form.reset();
-    }
-  }, [isSuccess, form]);
 
   // Get form errors for better error display
   const { errors } = form.formState;

@@ -19,7 +19,7 @@ const app = new Hono()
       const storage = c.get("storage");
 
       const { name, image } = c.req.valid("form");
-      console.log(image);
+
       let uploadedImageUrl: string | undefined;
 
       if (image instanceof File) {
@@ -28,14 +28,11 @@ const app = new Hono()
           ID.unique(),
           image
         );
-        const arrayBuffer = await storage.getFilePreview(
-          IMAGES_BUCKET_ID,
-          file.$id
-        );
 
-        uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-          arrayBuffer
-        ).toString("base64")}`;
+        // Get the direct file URL(free tier)
+        const fileUrl = storage.getFileView(IMAGES_BUCKET_ID, file.$id);
+
+        uploadedImageUrl = fileUrl.toString();
       }
 
       const workspace = await databases.createDocument(

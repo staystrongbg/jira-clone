@@ -5,11 +5,16 @@ import { client } from "@/lib/rpc";
 import { InferRequestType, InferResponseType } from "hono";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { UseMutationResult } from "@tanstack/react-query";
 
 type ResponseType = InferResponseType<(typeof client.api.workspaces)["$post"]>;
 type RequestType = InferRequestType<(typeof client.api.workspaces)["$post"]>;
 
-export const useCreateWorkspace = () => {
+export const useCreateWorkspace = (): UseMutationResult<
+  ResponseType,
+  Error,
+  RequestType
+> => {
   const queryClient = useQueryClient();
 
   const router = useRouter();
@@ -18,10 +23,8 @@ export const useCreateWorkspace = () => {
       const response = await client.api.workspaces.$post({ form });
       return await response.json();
     },
-    //redirect to workspace after successful login
     onSuccess: () => {
       toast.success("Workspace created successfully");
-      // Invalidate the current user query to ensure the user is logged in
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       router.push("/");
     },

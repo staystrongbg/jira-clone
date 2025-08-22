@@ -12,13 +12,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../ui/button";
 import { loginSchema, TLoginForm } from "@/schemas";
 import { useLogin } from "../../../hooks/auth/use-login";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { IsError } from "@/components/shared/isError";
 
 export const SignInForm = () => {
-  const { mutate, error, isSuccess, isPending } = useLogin();
+  const { mutate, error, isPending } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<TLoginForm>({
@@ -32,21 +32,21 @@ export const SignInForm = () => {
 
   const onSubmit: SubmitHandler<TLoginForm> = useCallback(
     (data: TLoginForm) => {
-      mutate({ json: data });
+      mutate(
+        { json: data },
+        {
+          onSuccess: () => {
+            form.reset();
+          },
+        }
+      );
     },
-    [mutate]
+    [mutate, form]
   );
 
   const togglePasswordVisibility = useCallback(() => {
     setShowPassword((prev) => !prev);
   }, []);
-
-  // Reset form on successful submission
-  useEffect(() => {
-    if (isSuccess) {
-      form.reset();
-    }
-  }, [isSuccess, form]);
 
   // Get form errors for better error display
   const { errors } = form.formState;

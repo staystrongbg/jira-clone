@@ -6,14 +6,15 @@ import { InferResponseType } from "hono";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { UseMutationResult } from "@tanstack/react-query";
 
 type ResponseType = InferResponseType<(typeof client.api.auth.logout)["$post"]>;
 
-export const useLogout = () => {
+export const useLogout = (): UseMutationResult<ResponseType, Error, void> => {
   const queryClient = useQueryClient();
 
   const router = useRouter();
-  const mutation = useMutation<ResponseType, Error>({
+  const mutation = useMutation<ResponseType, Error, void>({
     mutationFn: async () => {
       const response = await client.api.auth.logout.$post();
 

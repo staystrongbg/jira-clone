@@ -5,11 +5,16 @@ import { client } from "@/lib/rpc";
 import { InferRequestType, InferResponseType } from "hono";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { UseMutationResult } from "@tanstack/react-query";
 
 type ResponseType = InferResponseType<(typeof client.api.auth.signup)["$post"]>;
 type RequestType = InferRequestType<(typeof client.api.auth.signup)["$post"]>;
 
-export const useRegister = () => {
+export const useRegister = (): UseMutationResult<
+  ResponseType,
+  Error,
+  RequestType
+> => {
   const queryClient = useQueryClient();
 
   const router = useRouter();
@@ -24,8 +29,6 @@ export const useRegister = () => {
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("Register successful");
-      // Invalidate the current user query to ensure the user is logged in
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       router.push("/");
     },
